@@ -1,0 +1,53 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            {% if login_id is not defined %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ログイン</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="/account/auth/login" method="post">
+                        <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+                        <div class="form-group">
+                            <label>ログインID </label>
+                            <input type="text" name="login_id" placeholder="IDを入力してください" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>パスワード</label>
+                            <input type="password" name="password" placeholder="パスワードを入力してください" class="form-control">
+                        </div>
+                        <p><input type="submit" class="btn btn-primary btn-block" value="ログイン"></p>
+                    </form>
+                    <p>または</p>
+                    <p><a href="/account/signup/form" class="btn btn-primary btn-lg btn-block" role="button">新規登録する</a></p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+            {% if login_id is not defined %}
+            <div class="jumbotron">
+                <h1>Sora</h1>
+                <p>写真をアップロードして「いいね！」したり、コメントをつけたりできるウェブサービスのサンプルです！</p>
+            </div>
+            {% endif %}
+
+            <h3>新着画像</h3>
+            {% if post_list is empty %}
+            <p>画像が一件もありません…</p>
+            {% else %}
+                {% for post in post_list %}
+                    {% include 'Page/TimeLine/cell.html' %}
+                {% endfor %}
+            {% endif %}
+
+            {% include 'Page/TimeLine/pager.html' %}
+        </div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}

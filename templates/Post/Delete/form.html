@@ -1,0 +1,21 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <h2>以下の投稿を削除しますか？</h2>
+    <img src="/post_images/{{post.image_filename}}" style="max-width: 300px;max-height: 300px;">
+    <p>コメント：{{post.comment}}</p>
+    <p>投稿日時：{{post.created_at}}</p>
+    <hr>
+    <p>コメント、いいね！なども同時に削除されます</p>
+    <p>この操作は戻す事ができません</p>
+    <form action="/post/delete/commit" method="post">
+        <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+        <input type="hidden" name="post_id" value="{{post.id}}">
+        <input type="submit" class="btn btn-danger btn-block" value="削除する">
+    </form>
+    <hr>
+    <a href="/detail/{{post.id}}" class="btn btn-default btn-block">削除せずに戻る</a>
+</div>
+{% endautoescape %}
+{% endblock %}

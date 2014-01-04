@@ -1,0 +1,12 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <h1>管理画面</h1>
+    <p>このページは認証が必要です</p>
+
+    <h2>ユーザー一覧をダウンロード</h2>
+    <p><a href="UserAccount/CSV/download">CSVでダウンロード</a></p>
+</div>
+{% endautoescape %}
+{% endblock %}

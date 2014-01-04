@@ -1,0 +1,14 @@
+{
+    "require": {
+        "slim/slim": "2.*",
+        "slim/views": "0.1.*",
+        "twig/twig": "1.*",
+        "slim/extras": "2.0.*",
+        "illuminate/database": "4.0.*",
+        "phpunit/phpunit": "3.*",
+        "paquettg/php-html-parser": "1.6.*"
+    },
+    "autoload": {
+        "psr-0": {"": "lib/"}
+    }
+}

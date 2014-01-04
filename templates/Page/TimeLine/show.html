@@ -1,0 +1,24 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            {% include 'Page/TimeLine/pager.html' %}
+
+            {% if post_list is empty %}
+            <p>画像が一件もありません…</p>
+            {% else %}
+                {% for post in post_list %}
+                    {% include 'Page/TimeLine/cell.html' %}
+                {% endfor %}
+            {% endif %}
+
+            {% include 'Page/TimeLine/pager.html' %}
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}

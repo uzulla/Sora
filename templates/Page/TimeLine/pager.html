@@ -1,0 +1,15 @@
+<div class="text-center">
+    <ul class="pagination pagination-lg">
+        {% if page_num > 1 %}
+            {% if (page_num-1) == 1 %}
+            <li class="active"><a href="/">&laquo;</a></li>
+            {% else %}
+            <li class="active"><a href="/page/{{page_num-1}}">&laquo;</a></li>
+            {% endif %}
+        {% endif %}
+        <li><span>{{page_num}}</span></li>
+        {% if next_page_exists %}
+        <li class="active"><a href="/page/{{page_num+1}}">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>

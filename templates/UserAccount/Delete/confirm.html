@@ -1,0 +1,39 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h2>退会フォーム</h2>
+            <form action="/account/delete/commit" method="post">
+                <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+                <div class="form-group {% if error_list.login_id %}has-error{% endif %}">
+                    <label>ログインID</label>
+                    <p>{{login_id}}</p>
+                </div>
+                <div class="form-group {% if error_list.password %}has-error{% endif %}">
+                    <label>パスワード</label>
+                    <input type="password" name="password" placeholder="パスワードを入力してください" class="form-control">
+                    <p class="text-warning">{{error_list.password}}</p>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="agree" value="1" {% if form_values.agree=="1" %}checked="checked"{%endif%}> この操作は以下が実行され、元に戻すことはできないことを理解しています
+                        <ul>
+                        <li>指定アカウントは削除されます</li>
+                        <li>指定アカウントで投稿された投稿のコメントと画像を削除します</li>
+                        <li>指定アカウントの投稿につけられたコメント、いいね！は削除されます</li>
+                        <li>指定アカウントで他ユーザーにつけたコメント、いいね！は削除されます</li>
+                        </ul>
+                        {% if error_list.agree %}<p class="text-warning">{{error_list.agree}}</p>{% endif %}
+                    </label>
+                </div>
+                <input type="submit" class="btn btn-danger" value="削除">
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}

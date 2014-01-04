@@ -1,0 +1,148 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    {% if post is empty %}
+    <h3>そんな画像ありません…</h3>
+
+    {% else %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <ol class="breadcrumb">
+                <li><a href="/">トップ</a></li>
+                <li class="active">詳細</li>
+            </ol>
+            <div>
+                <div style="text-align: center">
+                    <a href="/post_images/{{post.image_filename}}">
+                    <img src="/post_images/{{post.image_filename}}" style="max-width: 100%;">
+                    </a>
+                </div>
+                {% if post.comment|length > 0 %}
+                <pre style="margin-top:10px;">{{post.comment|nl2br}}</pre>
+                {% endif %}
+                <div style="text-align: center"><em>post by {{post.login_id}} / {{post.created_at}}</em></div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <h4>コメント</h4>
+            <ul id="comment_list" class="list-group">
+                {% if comment_list is empty %}
+                <li class="list-group-item">まだコメントはありません</li>
+                {% endif %}
+                {% for comment in comment_list %}
+                <li class="list-group-item">
+                    {{comment.comment}} <br>
+                    <em style="font-size:80%">{{comment.login_id}} / {{comment.created_at}}</em>
+                    {% if login_id == comment.login_id %}
+                    <form action="/post/comment/delete" method="post" onsubmit="return confirm('削除しますか？');" style="display: inline-block">
+                        <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+                        <input type="hidden" name="post_id" value="{{post.id}}">
+                        <input type="hidden" name="comment_id" value="{{comment.id}}">
+                        <input type="submit" value="削除">
+                    </form>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if login_id %}
+            <form action="/post/comment/save" method="post" onsubmit="return confirm('投稿しますか？');">
+                <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+                <input type="hidden" name="post_id" value="{{post.id}}">
+                <div class="input-group">
+                    <input name="comment" type="text" class="form-control" placeholder="コメントを入力してください">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">投稿</button>
+                    </span>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h4>
+                いいね！
+                {% if login_id %}
+                <button id="unset_iine_btn" onclick="unset_iine('{{post.id}}', '{{csrf_token}}')" class="btn btn-danger"
+                {% if already_iine == false%}style="display:none"{% endif %}><span class="glyphicon glyphicon-heart"></span></button>
+
+                <button id="set_iine_btn" onclick="set_iine('{{post.id}}', '{{csrf_token}}')" class="btn btn-default"
+                {% if already_iine %}style="display:none"{% endif %}><span class="glyphicon glyphicon-heart"></span></button>
+                {% endif %}
+            </h4>
+            <div id="iine_list">
+                {% for iine in iine_list %}
+                <span class="label label-info" data-login-id="{{iine.login_id}}">{{iine.login_id}}</span>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" style="text-align: center;">
+        <hr>
+        {% if login_id == post.login_id %}
+        <form action="/post/delete/confirm" method="post">
+            <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+            <input type="hidden" name="post_id" value="{{post.id}}">
+            <input type="submit" value="この投稿を削除する" class="btn btn-danger">
+        </form>
+        {% endif %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    {% endif %}
+
+</div>
+<script>
+    function set_iine(post_id, csrf_token){
+        $.ajax({
+            url: "/post/iine/set",
+            type: "post",
+            dataType: "json",
+            data: {post_id:post_id, csrf_token:csrf_token},
+            success: function(data){
+                if(data.status!=='ok'){
+                    alert('保存に失敗しました、リロードしてやり直しください');
+                }else{
+                    $('#set_iine_btn').hide();
+                    $('#unset_iine_btn').show();
+                    $('#iine_list').prepend($('<span class="label label-info"/>')
+                            .text(data.login_id).attr('data-login-id', data.login_id));
+                }
+            },
+            error: function(){alert('失敗しました、リロードしてやり直しください');}
+        });
+    }
+
+    function unset_iine(post_id, csrf_token){
+        $.ajax({
+            url: "/post/iine/unset",
+            type: "post",
+            dataType: "json",
+            data: {post_id:post_id, csrf_token:csrf_token},
+            success: function(data){
+                if(data.status!=='ok'){
+                    alert('保存に失敗しました、リロードしてやり直しください');
+                }else{
+                    $('#unset_iine_btn').hide();
+                    $('#set_iine_btn').show();
+                    $('span[data-login-id=\''+data.login_id+'\']', $('#iine_list')).remove();
+                }
+            },
+            error: function(){alert('失敗しました、リロードしてやり直しください');}
+        });
+    }
+
+</script>
+{% endautoescape %}
+{% endblock %}

@@ -1,0 +1,5 @@
+vendor/
+composer.phar
+sqlite.db
+htdocs/post_images/*
+.php-version

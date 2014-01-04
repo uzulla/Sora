@@ -1,0 +1,46 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+            <h2>サインアップフォーム</h2>
+            <form action="/account/signup/confirm" method="post">
+                <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+                <div class="form-group {% if error_list.login_id %}has-error{% endif %}">
+                    <label>ログインID <em>アルファベット小文字と数字が使えます、最大16文字</em></label>
+                    <input type="text" name="login_id" placeholder="IDを入力してください" class="form-control" value="{{form_values.login_id}}">
+                    <p class="text-warning">{{error_list.login_id}}</p>
+                </div>
+                <div class="form-group {% if error_list.password %}has-error{% endif %}">
+                    <label>パスワード</label>
+                    <input type="password" name="password" placeholder="パスワードを入力してください" class="form-control" value="{{form_values.password}}">
+                    <p class="text-warning">{{error_list.password}}</p>
+                </div>
+                <div class="form-group {% if error_list.password_check %}has-error{% endif %}">
+                    <label>パスワード（確認）  <em>パスワードと同じものを入力してください</em></label>
+                    <input type="password" name="password_check" placeholder="パスワードと同じものを入力してください" class="form-control" value="{{form_values.password_check}}">
+                    <p class="text-warning">{{error_list.password_check}}</p>
+                </div>
+                <div>
+                    <h3>規約</h3>
+                    <p>（サービスの規約などをここに記載します）</p>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="agree" value="1" {% if form_values.agree=="1" %}checked="checked"{%endif%}> 規約に同意します
+                        {% if error_list.agree %}<p class="text-warning">{{error_list.agree}}</p>{% endif %}
+                    </label>
+                </div>
+                <input type="submit" class="btn btn-primary btn-block" value="確認画面へ">
+            </form>
+
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+</div>
+{% endautoescape %}
+{% endblock %}

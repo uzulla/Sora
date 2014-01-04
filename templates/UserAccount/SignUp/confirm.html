@@ -1,0 +1,33 @@
+{% extends "frame.html" %}
+{% block content %}
+{% autoescape true %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h2>サインアップ 確認画面</h2>
+            <form id="form" action="/account/signup/commit" method="post">
+                <input type="hidden" name="{{csrf_key}}" value="{{csrf_token}}">
+
+                <div class="form-group">
+                    <label>ログインID</label>
+                    <p>{{form_values.login_id}}</p>
+                    <input type="hidden" name="login_id" value="{{form_values.login_id}}" />
+                </div>
+
+                <div class="form-group">
+                    <p>規約に同意します</p>
+                    <input type="hidden" name="agree" value="{{form_values.agree}}" />
+                </div>
+                <input type="hidden" name="password" value="{{form_values.password}}" />
+                <input type="hidden" name="password_check" value="{{form_values.password_check}}" />
+
+                <button type="button" onclick="$('#form').submit();" class="btn btn-primary btn-large btn-block">登録する</button>
+                <button type="button" onclick="$('#form').attr('action', '/account/signup/form').submit();" class="btn btn-large btn-block" >戻る</button>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}
