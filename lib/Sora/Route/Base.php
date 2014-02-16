@@ -12,9 +12,7 @@ class Base {
 
         // multi-part時、slimはrequest->params()系がつかえなくなり、
         // それを参照しているcsrf guardが動作しなくなるので、オフにする必要がある。
-        if( !isset($_SERVER['HTTP_CONTENT_TYPE']) || !preg_match("|multipart/form-data|i", $_SERVER['HTTP_CONTENT_TYPE']) ){
-            $app->add(new \Slim\Extras\Middleware\CsrfGuard(SLIM_CSRF_DEFENDER_KEY_NAME));
-        }
+        $app->add(new \Slim\Extras\Middleware\CsrfGuard(SLIM_CSRF_DEFENDER_KEY_NAME));
 
         $app->error(function (\Exception $e) use ($app) {
             error_log("file:".$e->getFile()." line:".$e->getLine()." message:".$e->getMessage());

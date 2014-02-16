@@ -19,19 +19,6 @@ class Base {
         $response['X-frame-options'] = 'DENY';
     }
 
-    public function self_csrf_defender(){
-        // mutipart/form-dataの場合、CsrfGuardがつかえないので、自前でcsrf_tokenのチェックをおこなう
-        $csrf_token = (isset($_POST[SLIM_CSRF_DEFENDER_KEY_NAME])) ? $_POST[SLIM_CSRF_DEFENDER_KEY_NAME] : '';
-        if( !isset($_SESSION[SLIM_CSRF_DEFENDER_KEY_NAME]) || $csrf_token !== $_SESSION[SLIM_CSRF_DEFENDER_KEY_NAME] ){
-            $this->app->halt(400, 'Invalid or missing CSRF token.');
-        }
-        // csrf_tokenのパラメータを差し込み
-        $this->app->view()->appendData(array(
-            'csrf_key'      => SLIM_CSRF_DEFENDER_KEY_NAME,
-            'csrf_token'    => $_SESSION[SLIM_CSRF_DEFENDER_KEY_NAME],
-        ));
-    }
-
     public function destorySession(){
         // セッション情報削除
         $_SESSION = [];

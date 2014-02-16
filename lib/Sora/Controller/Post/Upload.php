@@ -11,13 +11,12 @@ class Upload extends \Sora\Controller\LoggedInBase {
 
     public function save(){
         $app = $this->app;
-        // CSRF対策チェック
-        $this->self_csrf_defender();
 
         //バリデーション
         $error_list = [];
-        // enctype multipart/form-dataなので、request->param(),get(),post()は使えない
-        $comment = $_POST['comment'];
+
+        $form_values = $this->params();
+        $comment = $form_values['comment'];
         if(mb_strlen($comment)>1000){
             $error_list['comment'] = 'コメントは1000文字以下にしてください';
         }
@@ -45,7 +44,7 @@ class Upload extends \Sora\Controller\LoggedInBase {
                 'Post/Upload/form.html',
                 [
                     'error_list'=>$error_list,
-                    'form_values'=>$_POST
+                    'form_values'=>$form_values
                 ]
             );
             return;
