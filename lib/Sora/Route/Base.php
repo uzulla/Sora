@@ -10,8 +10,7 @@ class Base {
             $app = \Slim\Slim::getInstance();
         }
 
-        // multi-part時、slimはrequest->params()系がつかえなくなり、
-        // それを参照しているcsrf guardが動作しなくなるので、オフにする必要がある。
+        // enable CSRFGuard Plugin
         $app->add(new \Slim\Extras\Middleware\CsrfGuard(SLIM_CSRF_DEFENDER_KEY_NAME));
 
         $app->error(function (\Exception $e) use ($app) {
